@@ -28,9 +28,7 @@ async function createConnection() {
 
 export const client = await createConnection();
 
-app.get("/", function (req, res) {
-    res.send("Hello world hai hello hai")
-});
+
 
 app.get("/classData", async function (req, res) {
     const classData = await client
