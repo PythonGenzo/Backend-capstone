@@ -54,12 +54,47 @@ app.get("/", function (req, res) {
 });
 
 app.get("/classData", async function (req, res) {
-    // const classData = await client
-    //     .db("B33WD")
-    //     .collection("classData")
-    //     .find({})
-    //     .toArray();
+    const classData = await client
+        .db("B33WD")
+        .collection("classData")
+        .find({})
+        .toArray();
     res.send(classData);
+});
+
+app.get("/classData/:id",  async function(req, res) {
+    const { id } = req.params;
+    const sessionData = await client
+        .db("B33WD")
+        .collection("classData")
+        .findOne({id: id})
+
+    sessionData
+        ? res.send(sessionData)
+        : res.status(404).send({ msg: "zNo such class data found"});
+});
+
+app.delete("/classData/:id",  async function(req, res) {
+    const { id } = req.params;
+    const sessionData = await client
+        .db("B33WD")
+        .collection("classData")
+        .deleteOne({id: id})
+
+    sessionData.deletedCount > 0
+        ? res.send(sessionData)
+        : res.status(404).send({ msg: "No such class data found"});
+});
+
+app.put("/classData/:id",  async function(req, res) {
+    const data = req.body;
+    const { id } = req.params;
+    const result = await client
+        .db("B33WD")
+        .collection("classData")
+        .updateOne({ id }, { $set: data})
+
+         res.send(result);
 });
 
 app.post("/classData", async function (req, res) {
@@ -72,4 +107,4 @@ app.post("/classData", async function (req, res) {
 });
 
 
-app.listen(PORT, () => console.log(`App is started in ${PORT}`));
+app.listen(PORT, () => console.log(`App is started in ${PORT}`));;
